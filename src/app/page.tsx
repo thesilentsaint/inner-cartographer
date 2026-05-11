@@ -10,7 +10,7 @@ const sectionVariant = {
     filter: "blur(0px)",
     transition: {
       duration: 1,
-      ease: [0.16, 1, 0.3, 1],
+      ease: "easeInOut",
     },
   },
 };
@@ -22,7 +22,7 @@ const parallaxVariant = {
     y: 0,
     transition: {
       duration: 1.2,
-      ease: [0.16, 1, 0.3, 1],
+      ease: "easeInOut",
     },
   },
 };
@@ -40,7 +40,7 @@ const giantTitleVariant = {
     y: 0,
     transition: {
       duration: 2,
-      ease: [0.16, 1, 0.3, 1],
+      ease: "easeInOut",
     },
   },
 };
@@ -101,7 +101,7 @@ export default function Home() {
             whileInView={{ opacity: 0.8, scale: 1.02 }}
             transition={{
               duration: 2.2,
-              ease: [0.16, 1, 0.3, 1],
+              ease: "easeInOut",
             }}
             viewport={{ once: false, amount: 0.5 }}
             className="absolute inset-0 w-full h-full object-cover blur-sm"
@@ -183,7 +183,7 @@ export default function Home() {
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               transition={{
                 duration: 1.8,
-                ease: [0.16, 1, 0.3, 1],
+                ease: "easeInOut",
               }}
               viewport={{ once: false, amount: 0.5 }}
               className="mb-10"
