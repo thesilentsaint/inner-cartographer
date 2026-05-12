@@ -2,48 +2,17 @@
 
 import { motion, useScroll, useSpring } from "framer-motion";
 
-const sectionVariant = {
-  hidden: { opacity: 0, y: 40, filter: "blur(6px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 1,
-      ease: "easeInOut",
-    },
-  },
-};
+import {
+  smoothEase,
+  sectionVariant,
+  giantTitleVariant,
+  parallaxVariant,
+} from "@/lib/motion";
 
-const parallaxVariant = {
-  hidden: { opacity: 0, y: 80 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1.2,
-      ease: "easeInOut",
-    },
-  },
-};
 
-// GLOBAL LARGE TITLE MOTION
-const giantTitleVariant = {
-  hidden: {
-    opacity: 0,
-    scale: 0.7,
-    y: 40,
-  },
-  show: {
-    opacity: 0.7,
-    scale: 2,
-    y: 0,
-    transition: {
-      duration: 2,
-      ease: "easeInOut",
-    },
-  },
-};
+
+
+
 
 export default function Home() {
 
