@@ -56,3 +56,28 @@ export const parallaxVariant = {
     },
   },
 };
+
+export const fadeUp = {
+  hidden: { opacity: 0, y: 40, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 1,
+      ease: smoothEase,
+    },
+  },
+};
+
+export const scaleReveal = {
+  hidden: { opacity: 0, scale: 0.9 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 1.2,
+      ease: smoothEase,
+    },
+  },
+};

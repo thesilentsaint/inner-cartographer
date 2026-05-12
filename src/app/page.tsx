@@ -12,8 +12,6 @@ import {
 
 
 
-
-
 export default function Home() {
 
   // SCROLL PROGRESS
