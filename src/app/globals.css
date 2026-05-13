@@ -1,52 +1,25 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* added on May 12, 2026 */
 /* =========================
-   BASE RESET + FOUNDATION
+   APP BASE RESET
 ========================= */
 
-html,
-body {
-  padding: 0;
+html, body {
   margin: 0;
+  padding: 0;
   background: #0b0b0f;
   color: #e5e5e5;
   font-family: system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 
-/* smooth scrolling fallback (Lenis will override later) */
+/* smooth scrolling fallback */
 html {
   scroll-behavior: smooth;
 }
 
 /* =========================
-   TYPOGRAPHY SCALE (Apple-like)
+   TYPOGRAPHY (Apple style)
 ========================= */
 
 h1, h2, h3 {
@@ -60,16 +33,18 @@ p {
 }
 
 /* =========================
-   SCENE SYSTEM (IMPORTANT)
+   SCENE SYSTEM
 ========================= */
 
 .scene {
   height: 100vh;
   width: 100%;
   position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   overflow: hidden;
 }
 
@@ -81,7 +56,7 @@ p {
 }
 
 /* =========================
-   IMAGE LAYER SYSTEM
+   IMAGE SYSTEM
 ========================= */
 
 .scene-bg {
@@ -93,7 +68,7 @@ p {
 }
 
 /* =========================
-   OVERLAY DEPTH
+   OVERLAY SYSTEM
 ========================= */
 
 .overlay-dark {
@@ -107,9 +82,119 @@ p {
 }
 
 /* =========================
-   SCROLL FIX
+   SCROLL UTILITIES
 ========================= */
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* =========================
+   DESIGN TOKENS (SINGLE SYSTEM)
+========================= */
+
+:root {
+  /* COLORS */
+  --bg: #0b0b0f;
+  --fg: #e5e5e5;
+  --muted: #a1a1aa;
+  --accent: #ffffff;
+
+  /* TYPOGRAPHY */
+  --font-display: system-ui, -apple-system, sans-serif;
+
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 28px;
+  --text-2xl: 40px;
+  --text-hero: 120px;
+
+  /* SPACING */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-12: 96px;
+
+  /* MOTION */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --duration-fast: 300ms;
+  --duration-medium: 800ms;
+  --duration-slow: 1400ms;
+}
+
+/* =========================
+   PILOT ATMOSPHERIC LAYERS
+========================= */
+
+.pilot {
+  position: relative;
+  min-height: 400vh;
+  background: var(--bg);
+}
+
+/* grain / noise layer */
+.noise-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("/noise.png"); /* optional */
+  mix-blend-mode: overlay;
+  z-index: 5;
+}
+
+/* fog layer */
+.fog-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    rgba(255,255,255,0.05),
+    rgba(0,0,0,0.85)
+  );
+  z-index: 6;
+}
+
+/* scene base */
+.scene {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* image placeholder */
+.scene-image {
+  font-size: 48px;
+  letter-spacing: -0.04em;
+  opacity: 0.5;
+  transition: all 0.3s var(--ease-smooth);
+}
+
+/* text block */
+.scene-text {
+  margin-top: var(--space-4);
+  text-align: center;
+  max-width: 520px;
+}
+
+.scene-text p {
+  margin: 12px 0;
+}
+
+/* CTA */
+.cta {
+  margin-top: 40px;
+  font-size: 14px;
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+

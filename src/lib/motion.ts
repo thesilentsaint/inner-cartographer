@@ -1,41 +1,51 @@
-import { cubicBezier } from "framer-motion";
+"use client";
 
-export const smoothEase = cubicBezier(0.16, 1, 0.3, 1);
+import { easeInOut } from "framer-motion";
 
-export const sectionVariant = {
+/* =========================
+   1. CORE MOTION TOKENS
+========================= */
+
+export const easeSmooth = [0.16, 1, 0.3, 1];
+
+export const duration = {
+  fast: 0.4,
+  medium: 1,
+  slow: 1.8,
+};
+
+/* =========================
+   2. SCENE ANIMATIONS
+========================= */
+
+export const fadeUp = {
   hidden: {
     opacity: 0,
     y: 40,
     filter: "blur(6px)",
   },
-
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-
     transition: {
-      duration: 1,
-      ease: smoothEase,
+      duration: duration.medium,
+      ease: easeSmooth,
     },
   },
 };
 
-export const giantTitleVariant = {
+export const sceneReveal = {
   hidden: {
     opacity: 0,
-    scale: 0.7,
-    y: 40,
+    scale: 0.98,
   },
-
   show: {
-    opacity: 0.7,
-    scale: 2,
-    y: 0,
-
+    opacity: 1,
+    scale: 1,
     transition: {
-      duration: 2,
-      ease: smoothEase,
+      duration: duration.slow,
+      ease: easeSmooth,
     },
   },
 };
@@ -45,39 +55,33 @@ export const parallaxVariant = {
     opacity: 0,
     y: 80,
   },
-
   show: {
     opacity: 1,
     y: 0,
-
     transition: {
-      duration: 1.2,
-      ease: smoothEase,
+      duration: duration.medium,
+      ease: easeSmooth,
     },
   },
 };
 
-export const fadeUp = {
-  hidden: { opacity: 0, y: 40, filter: "blur(6px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 1,
-      ease: smoothEase,
-    },
-  },
-};
+/* =========================
+   3. HERO / KEY MOMENTS
+========================= */
 
-export const scaleReveal = {
-  hidden: { opacity: 0, scale: 0.9 },
+export const heroTitle = {
+  hidden: {
+    opacity: 0,
+    scale: 0.6,
+    y: 40,
+  },
   show: {
-    opacity: 1,
-    scale: 1,
+    opacity: 0.8,
+    scale: 2,
+    y: 0,
     transition: {
-      duration: 1.2,
-      ease: smoothEase,
+      duration: duration.slow,
+      ease: easeSmooth,
     },
   },
 };

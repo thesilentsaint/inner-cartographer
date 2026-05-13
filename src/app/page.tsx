@@ -1,218 +1,128 @@
 "use client";
 
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 import {
-  smoothEase,
-  sectionVariant,
-  giantTitleVariant,
+  fadeUp,
+  sceneReveal,
+  heroTitle,
   parallaxVariant,
 } from "@/lib/motion";
 
-
-
-
 export default function Home() {
-
-  // SCROLL PROGRESS
-  const { scrollYProgress } = useScroll();
-
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-  });
-
   return (
-    <>
+    <main className="bg-[#0b0b0f] text-[#e5e5e5] overflow-x-hidden">
 
-      {/* MINIMAL TOP MENU */}
-      <div className="fixed top-0 left-0 w-full z-50 flex justify-center">
-        <div className="mt-4 flex gap-8 px-6 py-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-[11px] uppercase tracking-[0.3em] text-[#d4d4d8]">
-          <a href="#act1" className="hover:text-white transition-colors">
-            Section 1
-          </a>
+      {/* =========================
+          SCENE 01 — EMERGENCE
+      ========================= */}
+      <section className="scene">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: false, amount: 0.6 }}
+          variants={sceneReveal}
+          className="scene-content"
+        >
+          <motion.h1
+            variants={heroTitle}
+            className="text-4xl font-light tracking-tight"
+          >
+            Before Form
+          </motion.h1>
 
-          <a href="#act2" className="hover:text-white transition-colors">
-            Section 2
-          </a>
+          <motion.p
+            variants={fadeUp}
+            className="mt-4 text-[#a1a1aa]"
+          >
+            A quiet system begins to assemble itself
+          </motion.p>
+        </motion.div>
+      </section>
 
-          <a href="#act3" className="hover:text-white transition-colors">
-            Section 3
-          </a>
+      {/* =========================
+          SCENE 02 — THRESHOLD
+      ========================= */}
+      <section className="scene">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: false, amount: 0.6 }}
+          variants={fadeUp}
+          className="scene-content"
+        >
+          <motion.h2
+            variants={heroTitle}
+            className="text-3xl font-light tracking-tight"
+          >
+            The Skull Gate
+          </motion.h2>
 
-          <a href="#act4" className="hover:text-white transition-colors">
-            Section 4
-          </a>
-        </div>
-      </div>
+          <p className="mt-4 text-[#a1a1aa]">
+            A threshold without announcement. <br />
+            Structure dissolves at the edge of perception.
+          </p>
+        </motion.div>
+      </section>
 
-      {/* GLOBAL SCROLL BAR */}
+      {/* =========================
+          SCENE 03 — DESCENT
+      ========================= */}
+      <section className="scene">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: false, amount: 0.5 }}
+          variants={parallaxVariant}
+          className="scene-content"
+        >
+
+          <motion.h2
+            variants={heroTitle}
+            className="text-[140px] font-light tracking-tight opacity-70"
+          >
+            Descent
+          </motion.h2>
+
+          <p className="mt-4 text-[#a1a1aa]">
+            Movement inward is not travel. It is removal of resistance.
+          </p>
+
+        </motion.div>
+      </section>
+
+      {/* =========================
+          SCENE 04 — INNER MAP
+      ========================= */}
+      <section className="scene">
       <motion.div
-        style={{ scaleX }}
-        className="fixed top-16 left-0 right-0 h-[2px] origin-left bg-[#e5e5e5] z-40"
-      />
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.6 }}
+        variants={fadeUp}
+        className="scene-content"
+      >
+        <h2 className="text-3xl font-light">
+          Inner Cartography
+        </h2>
 
-      <main className="bg-[#0b0b0f] text-[#e5e5e5] overflow-x-hidden">
+        <p className="mt-4 text-[#a1a1aa]">
+          The map is not drawn. It is remembered through movement.
+        </p>
 
-        {/* ACT 1 */}
-        <section
-          id="act1"
-          className="relative h-screen flex items-center justify-center overflow-hidden"
-        >
-
-          {/* BACKGROUND IMAGE */}
-          <motion.img
-            src="/Test2.png"
-            alt="Temple-Mother"
-            initial={{ opacity: 0, scale: 1.15 }}
-            whileInView={{ opacity: 0.8, scale: 1.02 }}
-            transition={{
-              duration: 2.2,
-              ease: "easeInOut",
-            }}
-            viewport={{ once: false, amount: 0.5 }}
-            className="absolute inset-0 w-full h-full object-cover blur-sm"
-          />
-
-          {/* DARK OVERLAY */}
-          <div className="absolute inset-0 bg-black/60" />
-
-          {/* CONTENT */}
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.5 }}
-            variants={sectionVariant}
-            className="relative z-10 text-center"
+        {/* ISOLATED LINK LAYER (IMPORTANT FIX) */}
+        <div className="mt-10">
+          <Link
+            href="/pilot"
+            className="text-sm tracking-[0.2em] uppercase opacity-60 hover:opacity-100 transition-opacity duration-700 inline-block"
           >
+            Enter Signal
+          </Link>
+        </div>
+      </motion.div>
+    </section>
 
-            <motion.h1
-              variants={giantTitleVariant}
-              className="font-light tracking-tight text-[#f5f5f5]"
-              style={{ fontSize: "140px" }}
-            >
-              Before Form
-            </motion.h1>
-
-            <p className="text-[#d4d4d8] mt-8 text-lg">
-              A quiet system begins to assemble itself
-            </p>
-
-          </motion.div>
-        </section>
-
-        {/* ACT 2 */}
-        <section
-          id="act2"
-          className="h-screen flex items-center justify-center overflow-hidden"
-        >
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.5 }}
-            variants={sectionVariant}
-            className="text-center max-w-3xl"
-          >
-
-            <motion.h2
-              variants={giantTitleVariant}
-              className="font-light tracking-tight text-[#e5e5e5]"
-              style={{ fontSize: "140px" }}
-            >
-              The Skull Gate
-            </motion.h2>
-
-            <p className="text-[#a1a1aa] mt-8 leading-relaxed text-lg">
-              A threshold without announcement.
-              <br />
-              Structure dissolves at the edge of perception.
-            </p>
-
-          </motion.div>
-        </section>
-
-        {/* ACT 3 */}
-        <section
-          id="act3"
-          className="h-screen flex items-center justify-start pl-16 overflow-hidden"
-        >
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.5 }}
-            variants={parallaxVariant}
-            className="max-w-5xl"
-          >
-
-            {/* IMAGE */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 60 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{
-                duration: 1.8,
-                ease: "easeInOut",
-              }}
-              viewport={{ once: false, amount: 0.5 }}
-              className="mb-10"
-            >
-              <img
-                src="/skull-gate.png"
-                alt="Skull Gate Vision"
-                className="w-[340px] md:w-[520px] opacity-80"
-              />
-            </motion.div>
-
-            {/* TITLE */}
-            <motion.h2
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: false, amount: 0.5 }}
-              variants={giantTitleVariant}
-              className="font-light tracking-tight text-[#f5f5f5] text-left"
-              style={{ fontSize: "160px" }}
-            >
-              Descent
-            </motion.h2>
-
-            <p className="text-[#a1a1aa] mt-8 text-lg max-w-xl">
-              Movement inward is not travel.
-              It is removal of resistance.
-            </p>
-
-          </motion.div>
-        </section>
-
-        {/* ACT 4 */}
-        <section
-          id="act4"
-          className="h-screen flex items-center justify-center overflow-hidden"
-        >
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: false, amount: 0.5 }}
-            variants={sectionVariant}
-            className="text-center max-w-4xl"
-          >
-
-            <motion.h2
-              variants={giantTitleVariant}
-              className="font-light tracking-tight text-[#f5f5f5]"
-              style={{ fontSize: "140px" }}
-            >
-              Inner Cartography
-            </motion.h2>
-
-            <p className="text-[#a1a1aa] mt-8 text-lg">
-              The map is not drawn.
-              <br />
-              It is remembered through movement.
-            </p>
-
-          </motion.div>
-        </section>
-
-      </main>
-    </>
+    </main>
   );
 }
