@@ -1,209 +1,129 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import Lenis from "@studio-freight/lenis";
+import { useEffect, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { easeSmooth } from "@/lib/motion";
 
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function PilotPage() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [t, setT] = useState(0); // 0 → 1 scroll field
-
-  /* -----------------------------
-     LENIS + SCROLL FIELD
-  ----------------------------- */
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.4,
-      smoothWheel: true,
-      smoothTouch: false,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    const updateScroll = () => {
-      const el = containerRef.current;
-      if (!el) return;
-
-      const scrollTop = window.scrollY;
-      const maxScroll =
-        el.scrollHeight - window.innerHeight;
-
-      const progress = Math.min(
-        1,
-        Math.max(0, scrollTop / maxScroll)
-      );
-
-      setT(progress);
-    };
-
-    window.addEventListener("scroll", updateScroll);
-    updateScroll();
-
-    return () => {
-      window.removeEventListener("scroll", updateScroll);
-      lenis.destroy();
-    };
-  }, []);
-
-  /* -----------------------------
-     ATMOSPHERIC FIELDS
-  ----------------------------- */
-
-  const noise = 1 - smoothstep(0, 0.25, t);
-  const signal =
-    smoothstep(0.15, 0.5, t) *
-    (1 - smoothstep(0.5, 0.65, t));
-
-  const dream = smoothstep(0.45, 0.75, t);
-  const threshold = smoothstep(0.7, 1, t);
+  const containerRef = useRef(null);
 
   return (
-    <div ref={containerRef} className="pilot">
+    <main ref={containerRef} className="bg-[#0b0b0f] text-[#e5e5e5]">
+      {/* NOISE OVERLAY - Global Grain System */}
+      <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] mix-blend-overlay bg-[url('https://res.cloudinary.com/dn7vsyasl/image/upload/v1613312328/noise_v9pssq.png')]" />
 
-      {/* =========================
-          GLOBAL ATMOSPHERE LAYER
-      ========================== */}
-      <div
-        className="noise-layer"
-        style={{
-          opacity: 0.2 + noise * 0.8,
-        }}
-      />
-
-      <div
-        className="fog-layer"
-        style={{
-          opacity: 0.1 + dream * 0.6,
-        }}
-      />
-
-      {/* =========================
-          SCENE 1 — STATIC / NOISE
-      ========================== */}
-      <section className="scene">
-        <div
-          className="scene-image"
-          style={{
-            opacity: noise * 0.6,
-            filter: `blur(${18 * noise}px)`,
-            transform: `scale(${1.08 - noise * 0.05})`,
-          }}
-        >
-          THE HIDDEN GRACE
-        </div>
-
-        <div
-          className="scene-text"
-          style={{
-            opacity: 0.2 + (1 - noise),
-            transform: `translateY(${noise * 40}px)`,
-          }}
-        >
-          <p>fragments of signal not yet formed</p>
-          <p>pressure without origin</p>
-        </div>
-      </section>
-
-      {/* =========================
-          SCENE 2 — SIGNALS
-      ========================== */}
-      <section className="scene">
-        <div
-          className="scene-image"
-          style={{
-            opacity: signal * 0.3,
-            transform: `rotate(${signal * 2}deg) scale(1.05)`,
-          }}
-        >
-          M-CODE
-        </div>
-
-        <div className="scene-text">
-          <p style={{ opacity: signal }}>
-            Low probability coincidences
-          </p>
-
-          <p style={{ opacity: signal - 0.2 }}>
-            Certain places feel familiar
-          </p>
-
-          <p style={{ opacity: signal - 0.4 }}>
-            Dreams with unusual clarity
-          </p>
-        </div>
-      </section>
-
-      {/* =========================
-          SCENE 3 — DREAMSPACE
-      ========================== */}
-      <section className="scene">
-        <div
-          className="scene-image"
-          style={{
-            opacity: dream * 0.7,
-            filter: `blur(${6 - dream * 4}px)`,
-            transform: `translateY(${dream * -20}px)`,
-          }}
-        >
-          SPINAL SHAKTI
-        </div>
-
-        <div className="scene-text">
-          <p>Not all dreams behave like memory</p>
-          <p>Some arrive with atmosphere</p>
-          <p>Instruction without language</p>
-        </div>
-      </section>
-
-      {/* =========================
-          SCENE 4 — THRESHOLD
-      ========================== */}
-      <section className="scene">
-        <div
-          className="scene-image"
-          style={{
-            opacity: threshold,
-            transform: `scale(${1 - threshold * 0.02})`,
-          }}
-        >
-          THE KNOT OPENING
-        </div>
-
-        <div className="scene-text">
-          <h1 style={{ opacity: threshold }}>
-            THRESHOLD
-          </h1>
-
-          <p>
-            The system signals long before the mind understands
-          </p>
-
-          <p>
-            Some begin listening
-          </p>
-
-          <div className="cta">
-            The Inner Cartographer
+      {/* SCENE 1: STATIC / NOISE — "The Hidden Grace" */}
+      <section className="relative h-[300vh] w-full bg-black flex flex-col items-center">
+        <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+          {/* IMAGE: Emerges through blur/opacity */}
+          <motion.img 
+            src="/images/hidden-grace.jpg" 
+            className="absolute w-full h-full object-cover opacity-20 filter blur-xl scale-110"
+            style={{ 
+                opacity: useTransform(useScroll().scrollYProgress, [0, 0.15], [0, 0.3]),
+                filter: useTransform(useScroll().scrollYProgress, [0, 0.15], ["blur(40px)", "blur(10px)"]),
+                scale: useTransform(useScroll().scrollYProgress, [0, 0.2], [1.2, 1.05])
+            }}
+          />
+          
+          <div className="z-10 text-center px-6 max-w-2xl">
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 0.4 }}
+              transition={{ duration: 3 }}
+              className="text-[10px] uppercase tracking-[1em] mb-20"
+            >
+              Unresolved Pressure
+            </motion.p>
+            <h2 className="text-xl font-extralight tracking-widest leading-relaxed">
+              There are phases where the system <br/> begins resisting its own momentum.
+            </h2>
           </div>
         </div>
       </section>
 
-      {/* spacer for scroll depth */}
-      <div style={{ height: "120vh" }} />
-    </div>
-  );
-}
+      {/* SCENE 2: SIGNALS — "The M-Code" */}
+      <section className="relative h-[400vh] w-full">
+        <div className="sticky top-0 h-screen w-full flex items-center justify-center bg-[#0b0b0f]">
+          {/* Subliminal M-Code Image */}
+          <motion.div 
+             className="absolute inset-0 opacity-5 grayscale pointer-events-none"
+             style={{ rotate: useTransform(useScroll().scrollYProgress, [0.3, 0.6], [0, 2]) }}
+          >
+             <img src="/images/m-code.jpg" className="w-full h-full object-cover scale-150" />
+          </motion.div>
 
-/* -----------------------------
-   SMOOTHSTEP UTILITY
------------------------------ */
-function smoothstep(min: number, max: number, value: number) {
-  const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
-  return x * x * (3 - 2 * x);
+          <div className="relative z-10 flex flex-col items-center">
+            <motion.h1 
+              style={{ 
+                opacity: useTransform(useScroll().scrollYProgress, [0.35, 0.45, 0.55], [0, 0.8, 0]),
+                scale: useTransform(useScroll().scrollYProgress, [0.35, 0.55], [0.8, 1.1]),
+                letterSpacing: "1.5em"
+              }}
+              className="text-[12vw] font-thin uppercase pointer-events-none"
+            >
+              Signal
+            </motion.h1>
+            
+            <div className="mt-[-5vh] space-y-[40vh] text-center italic opacity-40 font-light">
+                <p>Low probability coincidences.</p>
+                <p>Certain places feeling strangely familiar.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENE 3: DREAMSPACE — "Spinal Shakti" */}
+      <section className="relative h-[300vh] w-full bg-[#050507]">
+        <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+          <motion.img 
+            src="/images/spinal-shakti.jpg"
+            className="absolute w-full h-full object-cover opacity-10 blur-sm"
+            style={{ 
+                y: useTransform(useScroll().scrollYProgress, [0.6, 0.9], ["10%", "-10%"]),
+                scale: 1.5 
+            }}
+          />
+          <div className="z-10 text-center">
+             <h2 className="text-8xl font-thin tracking-tighter opacity-20 uppercase">Dreamspace</h2>
+             <p className="mt-10 max-w-md mx-auto text-muted tracking-wide leading-loose">
+               Instruction without language. <br/> Symbolic density.
+             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENE 4: THRESHOLD — "The Knot Opening" */}
+      <section className="relative h-[200vh] w-full flex items-center justify-center">
+         <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center">
+            <motion.div 
+               style={{ opacity: useTransform(useScroll().scrollYProgress, [0.85, 0.95], [0, 0.6]) }}
+               className="mb-10"
+            >
+               <img src="/images/knot-opening.jpg" className="w-64 h-auto opacity-50 mix-blend-screen" />
+            </motion.div>
+
+            <div className="text-center z-10">
+                <p className="text-sm opacity-40 tracking-[0.5em] mb-4">THE INNER CARTOGRAPHER</p>
+                <h3 className="text-2xl font-light mb-20">The system signals long before the mind understands.</h3>
+                
+                <nav className="flex gap-12 justify-center">
+                    <button className="text-[10px] uppercase tracking-[0.3em] hover:text-white transition-colors duration-1000 border-b border-white/10 pb-2">
+                        Enter Atlas
+                    </button>
+                    <button className="text-[10px] uppercase tracking-[0.3em] hover:text-white transition-colors duration-1000 border-b border-white/10 pb-2">
+                        Continue Mapping
+                    </button>
+                </nav>
+            </div>
+         </div>
+      </section>
+    </main>
+  );
 }
