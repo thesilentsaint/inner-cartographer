@@ -1,128 +1,145 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
 
-import {
-  fadeUp,
-  sceneReveal,
-  heroTitle,
-  parallaxVariant,
-} from "@/lib/motion";
+export default function PilotPage() {
+  const { scrollY } = useScroll();
 
-export default function Home() {
+  // SCENE 1: Reveal Logic
+  const opacity = useTransform(scrollY, [0, 800], [0, 1]);
+  const scale = useTransform(scrollY, [0, 1200], [1.08, 1]);
+  const textOpacity = useTransform(scrollY, [900, 1500], [0, 1]);
+
+  // EXIT LOGIC: Everything in Scene 1 fades out to make room for Scene 2
+  // We start the exit at 2500px and finish by 3200px
+  const sceneOneExit = useTransform(scrollY, [2500, 3200], [1, 0]);
+  
+  // SCENE 2: The Signal (Placeholder)
+  // This appears after Scene 1 has started to fade
+  const sceneTwoOpacity = useTransform(scrollY, [3000, 3800], [0, 1]);
+  const sceneTwoY = useTransform(scrollY, [3000, 4000], [100, 0]);
+
   return (
-    <main className="bg-[#0b0b0f] text-[#e5e5e5] overflow-x-hidden">
+    <main className="[#f5f3ee] relative">
+      
+      {/* GRAIN OVERLAY */}
+      <div
+        className="
+          fixed
+          inset-0
+          pointer-events-none
+          opacity-[0.07]
+          z-[999]
+        "
+        style={{
+          backgroundImage: "url('/whiteGrain_01.png')",
+          backgroundRepeat: "repeat",
+          backgroundSize: "180px 180px",
+        }}
+      />
 
-      {/* =========================
-          SCENE 01 — EMERGENCE
-      ========================= */}
-      <section className="scene">
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: false, amount: 0.6 }}
-          variants={sceneReveal}
-          className="scene-content"
-        >
-          <motion.h1
-            variants={heroTitle}
-            className="text-4xl font-light tracking-tight"
+          {/* OPENING VEIL */}
+          <motion.div
+            className="
+              fixed
+              inset-0
+              z-[998]
+              flex
+              items-center
+              justify-center
+              [#f5f3ee]
+              pointer-events-none
+            "
+            style={{
+              opacity: useTransform(scrollY, [0, 300], [1, 0]),
+            }}
           >
-            Before Form
-          </motion.h1>
+            <motion.p
+              className="
+                [#f5f3ee]/40
+                text-[10px]
+                uppercase
+                tracking-[0.6em]
+                font-light
+              "
+              style={{
+                opacity: useTransform(scrollY, [0, 180], [1, 0]),
+                y: useTransform(scrollY, [0, 300], [0, -20]),
+              }}
+            >
+              The signal appears slowly.
+            </motion.p>
+          </motion.div>
 
-          <motion.p
-            variants={fadeUp}
-            className="mt-4 text-[#a1a1aa]"
-          >
-            A quiet system begins to assemble itself
-          </motion.p>
-        </motion.div>
-      </section>
 
-      {/* =========================
-          SCENE 02 — THRESHOLD
-      ========================= */}
-      <section className="scene">
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: false, amount: 0.6 }}
-          variants={fadeUp}
-          className="scene-content"
-        >
-          <motion.h2
-            variants={heroTitle}
-            className="text-3xl font-light tracking-tight"
-          >
-            The Skull Gate
-          </motion.h2>
-
-          <p className="mt-4 text-[#a1a1aa]">
-            A threshold without announcement. <br />
-            Structure dissolves at the edge of perception.
-          </p>
-        </motion.div>
-      </section>
-
-      {/* =========================
-          SCENE 03 — DESCENT
-      ========================= */}
-      <section className="scene">
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: false, amount: 0.5 }}
-          variants={parallaxVariant}
-          className="scene-content"
-        >
-
-          <motion.h2
-            variants={heroTitle}
-            className="text-[140px] font-light tracking-tight opacity-70"
-          >
-            Descent
-          </motion.h2>
-
-          <p className="mt-4 text-[#a1a1aa]">
-            Movement inward is not travel. It is removal of resistance.
-          </p>
-
-        </motion.div>
-      </section>
-
-      {/* =========================
-          SCENE 04 — INNER MAP
-      ========================= */}
-      <section className="scene">
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.6 }}
-        variants={fadeUp}
-        className="scene-content"
+      {/* SCENE 1: LOCKED VIEWPORT */}
+      <motion.div 
+        className="fixed inset-0 overflow-hidden"
+        style={{ 
+          opacity: sceneOneExit,
+          // This ensures that after Scene 1 is gone, it doesn't block clicks on Scene 2
+          pointerEvents: useTransform(scrollY, [3100, 3200], ["auto", "none"])
+        }}
       >
-        <h2 className="text-3xl font-light">
-          Inner Cartography
-        </h2>
+        <motion.img
+          src="/InvisibleHand.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover will-change-transform"
+          style={{ opacity, scale }}
+        />
 
-        <p className="mt-4 text-[#a1a1aa]">
-          The map is not drawn. It is remembered through movement.
-        </p>
+        <div
+          className="absolute inset-0 z-10"
+          style={{
+            background: `
+              radial-gradient(
+                circle at center,
+                rgba(245,243,238,0.08),
+                rgba(245,243,238,0.22)
+              )
+            `,
+          }}
+        />
 
-        {/* ISOLATED LINK LAYER (IMPORTANT FIX) */}
-        <div className="mt-10">
-          <Link
-            href="/pilot"
-            className="text-sm tracking-[0.2em] uppercase opacity-60 hover:opacity-100 transition-opacity duration-700 inline-block"
-          >
-            Enter Signal
-          </Link>
-        </div>
+        <motion.div
+          className="absolute inset-0 z-20 flex items-center justify-center text-center px-10"
+          style={{ opacity: textOpacity }}
+        >
+          <div>
+            <h1 className="text-[#1f1f1f] text-xl uppercase tracking-[1em] font-extralight">
+              Emergence
+            </h1>
+            <p className="mt-8 text-[#1f1f1f]/40 text-sm italic">
+              When times are tough... an Invisible Hand appears.
+            </p>
+          </div>
+        </motion.div>
       </motion.div>
-    </section>
 
+      {/* SCROLL SPACE & SCENE 2 TRACK */}
+      <div className="relative z-30">
+        {/* Spacer for Scene 1 (The depth of the first experience) */}
+        <div className="h-[3500px]" />
+
+        {/* SCENE 2: THE SIGNAL */}
+        <section className="min-h-screen flex items-center justify-center [#f5f3ee] px-10">
+          <motion.div 
+            style={{ opacity: sceneTwoOpacity, y: sceneTwoY }}
+            className="text-center"
+          >
+            <h2 className="text-[#1f1f1f]/40 text-xs uppercase tracking-[2em] mb-12">
+              The Signal
+            </h2>
+            <p className="max-w-md mx-auto text-[#1f1f1f]/80 font-light leading-relaxed">
+              The boundary between inner and outer begins softening. <br/>
+              A threshold without announcement.
+            </p>
+          </motion.div>
+        </section>
+        
+        {/* Extra spacer to allow Scene 2 to finish its animation */}
+        <div className="h-screen" />
+      </div>
     </main>
   );
 }

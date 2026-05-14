@@ -1,200 +1,140 @@
 @import "tailwindcss";
 
 /* =========================
-   APP BASE RESET
+   1. DESIGN TOKENS (The DNA)
 ========================= */
+:root {
+  /* Spiritual Palette */
+  --bg: #f5f3ee;
+  --fg: #1f1f1f;
+  --muted: #5c5c5c;
+  --accent: #ffffff;
+  --void: #000000;
 
+  /* Motion Physics (Apple-grade) */
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* Depth System */
+  --z-bg: 0;
+  --z-content: 10;
+  --z-fog: 20;
+  --z-grain: 9999;
+}
+
+/* =========================
+   2. APP BASE RESET
+========================= */
 html, body {
   margin: 0;
   padding: 0;
-  background: #0b0b0f;
-  color: #e5e5e5;
-  font-family: system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-}
-
-/* smooth scrolling fallback */
-html {
-  scroll-behavior: smooth;
-}
-
-/* =========================
-   TYPOGRAPHY (Apple style)
-========================= */
-
-h1, h2, h3 {
-  letter-spacing: -0.04em;
-  font-weight: 300;
-}
-
-p {
-  line-height: 1.6;
-  color: #a1a1aa;
-}
-
-/* =========================
-   SCENE SYSTEM
-========================= */
-
-.scene {
-  height: 100vh;
-  width: 100%;
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  overflow: hidden;
-}
-
-.scene-content {
-  position: relative;
-  z-index: 10;
-  max-width: 900px;
-  text-align: center;
-}
-
-/* =========================
-   IMAGE SYSTEM
-========================= */
-
-.scene-bg {
-  position: absolute;
-  inset: 0;
-  object-fit: cover;
-  opacity: 0.7;
-  transform: scale(1.05);
-}
-
-/* =========================
-   OVERLAY SYSTEM
-========================= */
-
-.overlay-dark {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at center,
-    rgba(0,0,0,0.2),
-    rgba(0,0,0,0.8)
-  );
-}
-
-/* =========================
-   SCROLL UTILITIES
-========================= */
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-/* =========================
-   DESIGN TOKENS (SINGLE SYSTEM)
-========================= */
-
-:root {
-  /* COLORS */
-  --bg: #0b0b0f;
-  --fg: #e5e5e5;
-  --muted: #a1a1aa;
-  --accent: #ffffff;
-
-  /* TYPOGRAPHY */
-  --font-display: system-ui, -apple-system, sans-serif;
-
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-md: 16px;
-  --text-lg: 20px;
-  --text-xl: 28px;
-  --text-2xl: 40px;
-  --text-hero: 120px;
-
-  /* SPACING */
-  --space-1: 8px;
-  --space-2: 16px;
-  --space-3: 24px;
-  --space-4: 32px;
-  --space-6: 48px;
-  --space-8: 64px;
-  --space-12: 96px;
-
-  /* MOTION */
-  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
-
-  --duration-fast: 300ms;
-  --duration-medium: 800ms;
-  --duration-slow: 1400ms;
-}
-
-/* =========================
-   PILOT ATMOSPHERIC LAYERS
-========================= */
-
-.pilot {
-  position: relative;
-  min-height: 400vh;
   background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, sans-serif;
+  
+  /* Critical for Sticky/Lenis Scroll */
+  overflow-x: hidden;
+  height: auto;           
+  min-height: 100%;       
+  -webkit-font-smoothing: antialiased;
 }
 
-/* grain / noise layer */
-.noise-layer {
+/* =========================
+   3. ATMOSPHERIC LAYERS
+========================= */
+
+/* High-priority Grain Overlay */
+.grain-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image: url("/noise.png"); /* optional */
-  mix-blend-mode: overlay;
-  z-index: 5;
+  z-index: var(--z-grain);
+  opacity: .05; 
+  background-image: url("/whiteGrain_01.png");
+  background-repeat: repeat;
+  /* mix-blend-mode: overlay;*/
+  will-change: transform;
 }
 
-/* fog layer */
+/* Architectural Fog */
 .fog-layer {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(
-    circle at center,
-    rgba(255,255,255,0.05),
-    rgba(0,0,0,0.85)
-  );
-  z-index: 6;
+  z-index: var(--z-fog);
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255,255,255,0.12),
+      rgba(245,243,238,0.72)
+    );
 }
 
-/* scene base */
-.scene {
+/* =========================
+   4. TYPOGRAPHY
+========================= */
+h1, h2, h3 {
+  letter-spacing: -0.04em;
+  font-weight: 300;
+  color: var(--fg);
+}
+
+p {
+  line-height: 1.8;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+.tracking-spiritual {
+  letter-spacing: 1em;
+  text-transform: uppercase;
+}
+
+/* =========================
+   5. COMPONENT STRUCTURE
+========================= */
+
+/* The Stage */
+.pilot-root {
+  position: relative;
+  width: 100%;
+  background: var(--bg);
+}
+
+/* Cinematic Scene Base */
+.scene-container {
+  position: relative;
+  width: 100%;
+  /* Height is controlled per-scene in JSX (e.g., h-[500vh]) */
+}
+
+.viewport-lock {
+  position: sticky;
+  top: 0;
   height: 100vh;
+  width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-/* image placeholder */
-.scene-image {
-  font-size: 48px;
-  letter-spacing: -0.04em;
-  opacity: 0.5;
-  transition: all 0.3s var(--ease-smooth);
+/* =========================
+   6. UTILITIES & OPTIMIZATION
+========================= */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-/* text block */
-.scene-text {
-  margin-top: var(--space-4);
-  text-align: center;
-  max-width: 520px;
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* perspective: 1000;*/
+  transform: translateZ(0);
 }
 
-.scene-text p {
-  margin: 12px 0;
+/* Performance hint for heavy scroll reveals */
+.will-reveal {
+  will-change: opacity, transform;
 }
-
-/* CTA */
-.cta {
-  margin-top: 40px;
-  font-size: 14px;
-  opacity: 0.6;
-  letter-spacing: 0.1em;
-}
-
